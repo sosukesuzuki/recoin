@@ -1,5 +1,5 @@
 CLANG_FORMAT := clang-format
-FORMAT_FILES := $(wildcard *.cpp) $(wildcard *.h)
+FORMAT_FILES := $(wildcard *.c) $(wildcard *.h)
 
 .PHONY: format
 

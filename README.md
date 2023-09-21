@@ -1,6 +1,6 @@
 # recoin
 
-VM based RegExp engine written in C++.
+Regular Expression engine written in C.
 
 ## Development
 
