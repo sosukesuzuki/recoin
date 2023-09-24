@@ -1,6 +1,12 @@
-typedef unsigned char UChar;
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef char UChar;
 
 enum TokenSyms {
+  TK_START,
   TK_EOT,
   TK_CHAR,
   TK_STRING,
@@ -28,6 +34,46 @@ typedef struct {
   } u;
 } RecoinToken;
 
-int fetch_token(RecoinToken *token, UChar **src, UChar *end) {
+int fetch_token(RecoinToken *token, UChar **src) {
+  UChar *p = *src;
+
+  if (isalpha(*p)) {
+    UChar *start = p;
+    while (isalpha(*p)) {
+      p++;
+    }
+    UChar *end = p;
+    int length = end - start;
+    token->type = TK_STRING;
+    token->u.s = malloc(sizeof(UChar) * (length + 1));
+    memcpy(token->u.s, start, length);
+    token->u.s[end - start] = '\0';
+    *src = p;
+    return 1;
+  } else if (*p == '|') {
+    token->type = TK_VERTICAL_LINE;
+    *src = p + 1;
+    return 1;
+  } else if (*p == '*') {
+    token->type = TK_ASTERISK;
+    *src = p + 1;
+    return 1;
+  }
+
+  return 0;
+}
+
+int main() {
+  UChar *src = "abc|*";
+  RecoinToken token;
+  token.type = TK_START;
+
+  fetch_token(&token, &src);
+  printf("%u\n", token.type);
+  fetch_token(&token, &src);
+  printf("%u\n", token.type);
+  fetch_token(&token, &src);
+  printf("%u\n", token.type);
+
   return 0;
 }
