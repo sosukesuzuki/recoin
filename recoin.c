@@ -6,7 +6,6 @@
 typedef char UChar;
 
 enum TokenSyms {
-  TK_START,
   TK_EOT,
   TK_CHAR,
   TK_STRING,
@@ -82,20 +81,37 @@ int fetch_token(RecoinToken *token, UChar **src) {
     memcpy(token->u.s, start, length);
     token->u.s[end - start] = '\0';
     *src = p;
-    return 1;
+    return 0;
   } else if (*p == '|') {
     token->type = TK_VERTICAL_LINE;
     *src = p + 1;
-    return 1;
+    return 0;
   } else if (*p == '*') {
     token->type = TK_ASTERISK;
     *src = p + 1;
-    return 1;
+    return 0;
   } else if (*p == '\0') {
     token->type = TK_EOT;
     *src = p;
-    return 1;
+    return 0;
   }
+
+  return 1;
+}
+
+int parse_subexp(RecoinNode **node, RecoinToken *token, UChar **src) {
+  return 0;
+}
+
+int parse_regexp(RecoinNode **node, UChar **src) {
+  int r;
+  RecoinToken token;
+
+  r = fetch_token(&token, src);
+  if (r > 0) return r;
+
+  r = parse_subexp(node, &token, src);
+  if (r > 0) return r;
 
   return 0;
 }
@@ -103,7 +119,6 @@ int fetch_token(RecoinToken *token, UChar **src) {
 int main() {
   UChar *src = "abc|*";
   RecoinToken token;
-  token.type = TK_START;
 
   fetch_token(&token, &src);
   printf("%u\n", token.type);
