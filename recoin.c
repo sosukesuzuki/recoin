@@ -33,11 +33,7 @@ typedef struct {
   } u;
 } RecoinToken;
 
-enum RecoinNodeType {
-  NODE_STRING,
-  NODE_QTFR_STAR,
-  NODE_CONS_ALT
-};
+enum RecoinNodeType { NODE_STRING, NODE_QTFR_STAR, NODE_CONS_ALT };
 
 typedef struct {
   enum RecoinNodeType type;
@@ -108,10 +104,12 @@ int parse_regexp(RecoinNode **node, UChar **src) {
   RecoinToken token;
 
   r = fetch_token(&token, src);
-  if (r > 0) return r;
+  if (r > 0)
+    return r;
 
   r = parse_subexp(node, &token, src);
-  if (r > 0) return r;
+  if (r > 0)
+    return r;
 
   return 0;
 }
