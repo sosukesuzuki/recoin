@@ -1,4 +1,7 @@
+typedef unsigned char UChar;
+
 enum TokenSyms {
+  TK_EOT,
   TK_CHAR,
   TK_STRING,
   TK_VERTICAL_LINE,        // U+007C
@@ -18,9 +21,13 @@ enum TokenSyms {
 typedef struct {
   enum TokenSyms type;
   union {
-    char c;
-    char *s;
+    // TK_CHAR
+    UChar c;
+    // TK_STRING
+    UChar *s;
   } u;
 } RecoinToken;
 
-int fetch_token(RecoinToken *token, char **src) { return 0; }
+int fetch_token(RecoinToken *token, UChar **src, UChar *end) {
+  return 0;
+}
