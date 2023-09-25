@@ -4,7 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-int fetch_token(RecoinToken *token, UChar **src) {
+typedef struct {
+  int parse_depth;
+} ScanEnv;
+
+int fetch_token(RecoinToken *token, UChar **src, ScanEnv *env) {
   UChar *p = *src;
 
   if (isalpha(*p)) {
@@ -37,19 +41,23 @@ int fetch_token(RecoinToken *token, UChar **src) {
   return 1;
 }
 
-int parse_subexp(RecoinNode **node, RecoinToken *token, UChar **src) {
+int parse_subexp(RecoinNode **node, RecoinToken *token, UChar **src,
+                 ScanEnv *env) {
   return 0;
 }
 
-int parse_regexp(RecoinNode **node, UChar **src) {
+int parse_regexp(RecoinNode **node, UChar **src, ScanEnv *env) {
   int r;
   RecoinToken token;
 
-  r = fetch_token(&token, src);
+  // initialize ScanEnv
+  env->parse_depth = 0;
+
+  r = fetch_token(&token, src, env);
   if (r > 0)
     return r;
 
-  r = parse_subexp(node, &token, src);
+  r = parse_subexp(node, &token, src, env);
   if (r > 0)
     return r;
 
