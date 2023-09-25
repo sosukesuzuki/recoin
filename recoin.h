@@ -36,32 +36,28 @@ enum RecoinNodeType { NODE_STRING, NODE_QTFR_STAR, NODE_CONS_ALT };
 typedef struct RecoinNode RecoinNode;
 
 typedef struct {
-  enum RecoinNodeType type;
-} RecoinNodeBase;
-
-typedef struct {
-  RecoinNodeBase base;
   RecoinNode *target;
 } RecoinQtfrNode;
 
 typedef struct {
-  RecoinNodeBase base;
   RecoinNode *car;
   RecoinNode *cdr;
 } RecoinConsAltNode;
 
 typedef struct {
-  RecoinNodeBase base;
   UChar *s;
 } RecoinStringNode;
 
 struct RecoinNode {
+  enum RecoinNodeType type;
   union {
     RecoinQtfrNode qtfr;
     RecoinConsAltNode cons;
+    RecoinStringNode string;
   } u;
 };
 
 int fetch_token(RecoinToken *token, UChar **src);
+int parse_regexp(RecoinNode **node, UChar **src);
 
 #endif // RECOIN_H

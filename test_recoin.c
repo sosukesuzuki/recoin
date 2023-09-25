@@ -52,12 +52,34 @@ void fetch_token_basic_regexp_1() {
   fetch_token(&token, &src);
   TEST_ASSERT(token.type == TK_ASTERISK);
 }
+void parse_regexp_str_1() {
+  UChar *src = "abc";
+  RecoinNode *node;
+  int r = parse_regexp(&node, &src);
+  TEST_ASSERT(node->type == NODE_STRING);
+  TEST_ASSERT(strcmp(node->u.string.s, "abc") == 0);
+  TEST_ASSERT(r == 0);
+}
+void parse_regexp_cons_alt_1() {
+  UChar *src = "abc|def";
+  RecoinNode *node;
+  int r = parse_regexp(&node, &src);
+  printf("node->type: %d\n", node->type);
+  TEST_ASSERT(node->type == NODE_CONS_ALT);
+  TEST_ASSERT(node->u.cons.car->type == NODE_STRING);
+  TEST_ASSERT(strcmp(node->u.cons.car->u.string.s, "abc") == 0);
+  TEST_ASSERT(node->u.cons.cdr->type == NODE_STRING);
+  TEST_ASSERT(strcmp(node->u.cons.cdr->u.string.s, "def") == 0);
+  TEST_ASSERT(r == 0);
+}
 
 int main() {
   RUN_TEST(fetch_token_str_1);
   RUN_TEST(fetch_token_cons_alt_1);
   RUN_TEST(fetch_token_qtfr_asterrisk_1);
   RUN_TEST(fetch_token_basic_regexp_1);
+  RUN_TEST(parse_regexp_str_1);
+  RUN_TEST(parse_regexp_cons_alt_1);
 
   return 0;
 }

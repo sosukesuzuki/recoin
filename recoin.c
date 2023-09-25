@@ -37,16 +37,50 @@ int fetch_token(RecoinToken *token, UChar **src) {
   return 1;
 }
 
-int parse_cons_alt(RecoinNode **node, RecoinToken *token, UChar **src) {
+int parse_qtfr(RecoinNode *node, RecoinToken *token, UChar **src) { return 0; }
+
+int parse_atom(RecoinNode *node, RecoinToken *token, UChar **src) {
+  if (token->type == TK_STRING) {
+    node->type = NODE_STRING;
+    // copy string from token
+    node->u.string.s = malloc(sizeof(UChar) * (strlen(token->u.s) + 1));
+    strcpy(node->u.string.s, token->u.s);
+    return fetch_token(token, src);
+  }
+  return 1;
+}
+
+int parse_cons_alt(RecoinNode *node, RecoinToken *token, UChar **src) {
+  int r;
+  RecoinNode *car = malloc(sizeof(RecoinNode));
+  r = parse_atom(car, token, src);
+  if (r > 0) {
+    return r;
+  }
+  for (;;) {
+    if (token->type == TK_VERTICAL_LINE) {
+      r = fetch_token(token, src);
+      if (r > 0) {
+        return r;
+      }
+      RecoinNode *cdr = malloc(sizeof(RecoinNode));
+      r = parse_atom(cdr, token, src);
+      if (r > 0) {
+        return r;
+      }
+      node->type = NODE_CONS_ALT;
+      node->u.cons.car = car;
+      node->u.cons.cdr = cdr;
+    } else {
+      *node = *car;
+      return 0;
+    }
+  }
   return 0;
 }
 
-int parse_qtfr(RecoinNode **node, RecoinToken *token, UChar **src) { return 0; }
-
-int parse_atom(RecoinNode **node, RecoinToken *token, UChar **src) { return 0; }
-
 int parse_subexp(RecoinNode **node, RecoinToken *token, UChar **src) {
-  return 0;
+  return parse_cons_alt(*node, token, src);
 }
 
 int parse_regexp(RecoinNode **node, UChar **src) {
