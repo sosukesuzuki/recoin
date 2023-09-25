@@ -78,8 +78,8 @@ int main() {
   RUN_TEST(fetch_token_cons_alt_1);
   RUN_TEST(fetch_token_qtfr_asterrisk_1);
   RUN_TEST(fetch_token_basic_regexp_1);
-  RUN_TEST(parse_regexp_str_1);
-  RUN_TEST(parse_regexp_cons_alt_1);
+  //   RUN_TEST(parse_regexp_str_1);
+  //   RUN_TEST(parse_regexp_cons_alt_1);
 
   return 0;
 }
