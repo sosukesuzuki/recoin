@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
-  int parse_depth;
-} ScanEnv;
-
 int fetch_token(RecoinToken *token, UChar **src, ScanEnv *env) {
   UChar *p = *src;
 

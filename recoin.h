@@ -57,7 +57,11 @@ struct RecoinNode {
   } u;
 };
 
-int fetch_token(RecoinToken *token, UChar **src);
-int parse_regexp(RecoinNode **node, UChar **src);
+typedef struct {
+  int parse_depth;
+} ScanEnv;
+
+int fetch_token(RecoinToken *token, UChar **src, ScanEnv *env);
+int parse_regexp(RecoinNode **node, UChar **src, ScanEnv *env);
 
 #endif // RECOIN_H
