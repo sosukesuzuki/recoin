@@ -62,6 +62,6 @@ struct RecoinNode {
   } u;
 };
 
-int fetch_tken(RecoinToken *token, UChar *src);
+int fetch_token(RecoinToken *token, UChar **src);
 
 #endif // RECOIN_H

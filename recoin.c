@@ -63,17 +63,3 @@ int parse_regexp(RecoinNode **node, UChar **src) {
 
   return 0;
 }
-
-int main() {
-  UChar *src = "abc|*";
-  RecoinToken token;
-
-  fetch_token(&token, &src);
-  printf("%u\n", token.type);
-  fetch_token(&token, &src);
-  printf("%u\n", token.type);
-  fetch_token(&token, &src);
-  printf("%u\n", token.type);
-
-  return 0;
-}
