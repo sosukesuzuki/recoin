@@ -38,7 +38,7 @@ int fetch_token(RecoinToken *token, UChar **src, ScanEnv *env) {
     return 0;
   }
 
-  return 1;
+  return -1;
 }
 
 int parse_subexp(RecoinNode **node, RecoinToken *token, UChar **src,
@@ -54,11 +54,11 @@ int parse_regexp(RecoinNode **node, UChar **src, ScanEnv *env) {
   env->parse_depth = 0;
 
   r = fetch_token(&token, src, env);
-  if (r > 0)
+  if (r < 0)
     return r;
 
   r = parse_subexp(node, &token, src, env);
-  if (r > 0)
+  if (r < 0)
     return r;
 
   return 0;
